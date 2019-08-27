@@ -58,17 +58,18 @@ CPP_OBJS=.\WinRel/
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
-BSC32_SBRS= \
-	
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 BSC32_FLAGS=/nologo /o$(OUTDIR)/"HelloWindows32.bsc" 
+BSC32_SBRS= \
+	$(INTDIR)/main.sbr
 
 $(OUTDIR)/HelloWindows32.bsc : $(OUTDIR)  $(BSC32_SBRS)
+    $(BSC32) @<<
+  $(BSC32_FLAGS) $(BSC32_SBRS)
+<<
+
 LINK32=link.exe
-DEF_FILE=
-LINK32_OBJS= \
-	
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NOLOGO /SUBSYSTEM:windows /MACHINE:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NOLOGO /SUBSYSTEM:windows /MACHINE:I386
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
@@ -76,8 +77,14 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  odbccp32.lib /NOLOGO /SUBSYSTEM:windows /INCREMENTAL:no\
  /PDB:$(OUTDIR)/"HelloWindows32.pdb" /MACHINE:I386\
  /OUT:$(OUTDIR)/"HelloWindows32.exe" 
+DEF_FILE=
+LINK32_OBJS= \
+	$(INTDIR)/main.obj
 
 $(OUTDIR)/HelloWindows32.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
 
 !ELSEIF  "$(CFG)" == "Win32 Debug"
 
@@ -109,17 +116,18 @@ CPP_OBJS=.\WinDebug/
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
-BSC32_SBRS= \
-	
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 BSC32_FLAGS=/nologo /o$(OUTDIR)/"HelloWindows32.bsc" 
+BSC32_SBRS= \
+	$(INTDIR)/main.sbr
 
 $(OUTDIR)/HelloWindows32.bsc : $(OUTDIR)  $(BSC32_SBRS)
+    $(BSC32) @<<
+  $(BSC32_FLAGS) $(BSC32_SBRS)
+<<
+
 LINK32=link.exe
-DEF_FILE=
-LINK32_OBJS= \
-	
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NOLOGO /SUBSYSTEM:windows /DEBUG /MACHINE:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NOLOGO /SUBSYSTEM:windows /DEBUG /MACHINE:I386
 LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
@@ -127,8 +135,14 @@ LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib\
  odbccp32.lib /NOLOGO /SUBSYSTEM:windows /INCREMENTAL:yes\
  /PDB:$(OUTDIR)/"HelloWindows32.pdb" /DEBUG /MACHINE:I386\
  /OUT:$(OUTDIR)/"HelloWindows32.exe" 
+DEF_FILE=
+LINK32_OBJS= \
+	$(INTDIR)/main.obj
 
 $(OUTDIR)/HelloWindows32.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
 
 !ENDIF 
 
@@ -141,5 +155,17 @@ $(OUTDIR)/HelloWindows32.exe : $(OUTDIR)  $(DEF_FILE) $(LINK32_OBJS)
 .cxx{$(CPP_OBJS)}.obj:
    $(CPP) $(CPP_PROJ) $<  
 
+################################################################################
+# Begin Group "Source Files"
+
+################################################################################
+# Begin Source File
+
+SOURCE=.\main.cpp
+
+$(INTDIR)/main.obj :  $(SOURCE)  $(INTDIR)
+
+# End Source File
+# End Group
 # End Project
 ################################################################################
