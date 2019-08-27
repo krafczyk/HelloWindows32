@@ -1,9 +1,12 @@
 #include <windows.h>
+#include <stdio.h>
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 {
+	printf("1\n");
+	
 	// Register the window class.
 	const char CLASS_NAME[] = "Sample Window Class";
 
@@ -16,6 +19,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	RegisterClass(&wc);
 
 	// Create the window.
+
+	printf("2\n");
 
 	HWND hwnd = CreateWindowEx(
 		0,								// Optional window styles.
@@ -32,10 +37,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		NULL		// Additional application data
 		);
 
+	printf("3\n");
+
 	if (hwnd == NULL)
 	{
+		LPTSTR error_message;
+		DWORD num_chars = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER| FORMAT_MESSAGE_FROM_SYSTEM,
+					  				  NULL,
+					  				  GetLastError(),
+					  				  LANG_USER_DEFAULT,
+					  				  error_message,
+					  				  0,
+					  				  NULL);
+		if(num_chars == 0) {
+			printf("There was a problem formatting the message!\n");
+		} else {
+			printf("A message of length %i was written\n", num_chars);
+		}
+	    //printf("There was a problem creating the window: %s\n", error_message);
+		//LocalFree(error_message);
+		              
+
 		return 0;
 	}
+
+	printf("4\n");
 
 	ShowWindow(hwnd, nCmdShow);
 
