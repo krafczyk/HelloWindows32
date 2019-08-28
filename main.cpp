@@ -3,6 +3,27 @@
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+CHAR ShowError() {
+		LPVOID lpMsgBuf;
+		DWORD last_error = GetLastError();
+		DWORD num_chars = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|
+										FORMAT_MESSAGE_FROM_SYSTEM |
+										FORMAT_MESSAGE_IGNORE_INSERTS,
+					  				    NULL,
+					  				    last_error,
+					  				    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+					  				    (LPTSTR) &lpMsgBuf,
+					  				    0, NULL);
+		if(num_chars == 0) {
+			printf("There was a problem formatting the message!\n");
+			return 0;
+		}
+
+		MessageBox(NULL, (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK);
+		LocalFree(lpMsgBuf);
+		return 1;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 {
 	printf("1\n");
@@ -16,7 +37,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	wc.hInstance		= hInstance;
 	wc.lpszClassName	= CLASS_NAME;
 
-	RegisterClass(&wc);
+	if (RegisterClass(&wc) == 0) {
+		ShowError();
+		return 0;
+	}
 
 	// Create the window.
 
@@ -41,23 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	if (hwnd == NULL)
 	{
-		LPVOID lpMsgBuf;
-		DWORD last_error = GetLastError();
-		DWORD num_chars = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|
-										FORMAT_MESSAGE_FROM_SYSTEM |
-										FORMAT_MESSAGE_IGNORE_INSERTS,
-					  				    NULL,
-					  				    last_error,
-					  				    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-					  				    (LPTSTR) &lpMsgBuf,
-					  				    0, NULL);
-		if(num_chars == 0) {
-			printf("There was a problem formatting the message!\n");
-			return 0;
-		}
-
-		MessageBox(NULL, (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK);
-		LocalFree(lpMsgBuf);
+		ShowError();
 		return 0;
 	}
 
