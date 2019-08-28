@@ -25,16 +25,21 @@ CHAR ShowError() {
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
-{
-	printf("1\n");
-	
+{	
 	// Register the window class.
 	const char CLASS_NAME[] = "Sample Window Class";
 
 	WNDCLASS wc;
 
+	wc.style			= 0;
 	wc.lpfnWndProc		= WindowProc;
+	wc.cbClsExtra		= 0;
+	wc.cbWndExtra		= 0;
 	wc.hInstance		= hInstance;
+	wc.hIcon			= NULL;
+	wc.hCursor			= NULL;
+	wc.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+	wc.lpszMenuName		= NULL;
 	wc.lpszClassName	= CLASS_NAME;
 
 	if (RegisterClass(&wc) == 0) {
@@ -43,9 +48,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	}
 
 	// Create the window.
-
-	printf("2\n");
-
 	HWND hwnd = CreateWindowEx(
 		0,								// Optional window styles.
 		CLASS_NAME,						// Window class
@@ -61,15 +63,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		NULL		// Additional application data
 		);
 
-	printf("3\n");
-
 	if (hwnd == NULL)
 	{
 		ShowError();
 		return 0;
 	}
-
-	printf("4\n");
 
 	ShowWindow(hwnd, nCmdShow);
 
